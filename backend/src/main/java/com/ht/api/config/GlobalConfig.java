@@ -10,14 +10,20 @@ import java.util.List;
 
 @Service
 public class GlobalConfig {
-    public final DictionaryMapper dictionaryMapper;
+    public DictionaryMapper dictionaryMapper;
     public static HashMap<String, Dictionary> corePara;
 
     @Autowired
     public GlobalConfig(DictionaryMapper dictionaryMapper) {
-        this.dictionaryMapper = dictionaryMapper;
-        corePara = addListToMap(dictionaryMapper.getCore());
-        System.out.println("ok");
+        try {
+            this.dictionaryMapper = dictionaryMapper;
+            corePara = addListToMap(dictionaryMapper.getCore());
+            System.out.println("ok");
+        }
+        catch (Exception e){
+            System.out.println("not ok");
+            System.out.println(e.toString());
+        }
     }
     public static HashMap<String, Dictionary> addListToMap(List<Dictionary> tList) {
         HashMap<String, Dictionary> newhash = new HashMap<>();

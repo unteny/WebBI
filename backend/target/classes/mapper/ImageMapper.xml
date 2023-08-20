@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ht.api.mapper.ImageMapper">
+    <insert id="add" parameterType="com.ht.api.entity.Image">
+        INSERT INTO img_info (filename, cart,name)
+        VALUES (#{filename},#{cart}, #{name})
+    </insert>
+
+    <update id="uppdate" parameterType="com.ht.api.entity.Image">
+        UPDATE img_info
+        SET  cart = #{cart} ,name = #{name}
+        WHERE filename = #{filename}
+    </update>
+
+    <delete id="remove" parameterType="java.lang.String">
+        DELETE FROM img_info WHERE name = #{name}
+    </delete>
+
+    <select id="getByName" parameterType="java.lang.String" resultType="com.ht.api.entity.Image">
+        SELECT id, filename, cart, name
+        FROM img_info
+        WHERE name = #{name} or filename = #{name}
+    </select>
+
+    <select id="getByCart" parameterType="java.lang.String" resultType="com.ht.api.entity.Image">
+        SELECT id, filename, cart, name
+        FROM img_info
+        WHERE cart = #{cart}
+    </select>
+
+    <select id="getAll" resultType="com.ht.api.entity.Image">
+        SELECT id ,filename ,name, cart
+        FROM img_info
+        LIMIT 100
+    </select>
+
+    <select id="getAllCarts" resultType="java.lang.String">
+        SELECT cart cartname FROM img_info GROUP BY cart
+    </select>
+
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ht.api.mapper.ViewInfoMapper">
+    <resultMap id="modelResultMap" type="com.ht.api.entity.ViewInfo">
+        <id property="id" column="id" />
+        <result property="viewName" column="viewname" />
+        <result property="info" column="info" />
+        <result property="cart" column="cart" />
+        <result property="auth" column="auth" />
+        <result property="createTime" column="create_time" />
+        <result property="code" column="code" />
+    </resultMap>
+
+    <insert id="add" parameterType="com.ht.api.entity.ViewInfo">
+        INSERT INTO view_info ( viewname	, info	,  cart	, auth	, code )
+        VALUES (#{view_info},#{info}, #{cart}, #{auth}, #{code})
+    </insert>
+
+    <update id="update" parameterType="com.ht.api.entity.ViewInfo">
+        UPDATE view_info
+        SET viewname = #{viewname}, info = #{info}, cart = #{cart}, code = #{code}
+        WHERE id = #{id}
+    </update>
+
+
+
+    <delete id="remove" parameterType="com.ht.api.entity.ViewInfo">
+        DELETE FROM view_info WHERE id = #{id} and view_info =#{view_info} and info = #{info} and cart =#{cart} and code = #{code}
+    </delete>
+
+    <select id="getByNameOrID" parameterType="java.lang.String" resultMap="modelResultMap">
+        SELECT *
+        FROM view_info
+        WHERE viewname LIKE CONCAT('%', #{name}, '%') or id = #{name}
+    </select>
+
+    <select id="getByCart" parameterType="java.lang.String" resultMap="modelResultMap">
+        SELECT *
+        FROM view_info
+        WHERE cart = #{cart}
+    </select>
+
+    <select id="getAll" resultMap="modelResultMap">
+        SELECT *
+        FROM view_info LIMIT 1000
+    </select>
+
+</mapper>

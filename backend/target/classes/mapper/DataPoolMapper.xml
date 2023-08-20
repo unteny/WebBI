@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ht.api.mapper.DataPoolMapper">
+    <resultMap id="dataPoolResultMap" type="com.ht.api.entity.DataPool">
+        <id property="id" column="id" />
+        <result property="conname" column="conname" />
+        <result property="constr" column="constr" />
+        <result property="user" column="user" />
+        <result property="pwd" column="pwd" />
+        <result property="type" column="type" />
+        <result property="inisize" column="ini_size" />
+        <result property="maxactive" column="max_active" />
+        <result property="minidle" column="min_idle" />
+        <result property="maxwait" column="max_wait" />
+        <result property="istest" column="istest" />
+        <result property="testsql" column="test_sql" />
+
+    </resultMap>
+
+    <insert id="add" parameterType="com.ht.api.entity.DataPool">
+        INSERT INTO datasetting (conname, constr,user, pwd, type,ini_size,max_active,min_idle,max_wait,istest,test_sql)
+        VALUES (#{conname},#{constr}, #{user}, #{pwd}, #{type}, #{inisize}, #{maxactive}, #{minidle}, #{maxwait}, #{istest}, #{testsql})
+    </insert>
+
+    <update id="uppdate" parameterType="com.ht.api.entity.DataPool">
+        UPDATE datasetting
+        SET conname = #{conname}, constr = #{constr} ,user = #{user}, pwd = #{pwd}, type = #{type} , test_sql = #{testsql}
+          , ini_size = #{inisize}, max_active = #{maxactive}, min_idle = #{minidle}, max_wait = #{maxwait}, istest = #{istest}
+        WHERE conname = #{conname}
+    </update>
+
+    <delete id="remove" parameterType="java.lang.String">
+        DELETE FROM datasetting WHERE conname = #{conname}
+    </delete>
+
+    <select id="getPoolByName" parameterType="java.lang.String" resultMap="dataPoolResultMap">
+        SELECT *
+        FROM datasetting
+        WHERE conname = #{conname}
+    </select>
+
+    <select id="getAll" resultMap="dataPoolResultMap">
+        SELECT *
+        FROM datasetting
+    </select>
+
+</mapper>

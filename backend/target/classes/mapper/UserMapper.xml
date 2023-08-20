@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ht.api.mapper.UserMapper">
+    <resultMap id="modelResultMap" type="com.ht.api.entity.User">
+        <id property="id" column="id" />
+        <result property="username" column="username" />
+        <result property="password" column="password" />
+        <result property="email" column="email" />
+        <result property="status" column="status" />
+    </resultMap>
+
+    <insert id="add" parameterType="com.ht.api.entity.User">
+        INSERT INTO user (username, password,email,status)
+        VALUES (#{user},#{password},#{email}, #{status})
+    </insert>
+
+    <update id="update" parameterType="com.ht.api.entity.User">
+        UPDATE user
+        SET  cart = #{cart} ,name = #{name}
+        WHERE id = #{id} and username =#{username} and password = #{password} and email = #{email} and status =#{status}
+    </update>
+
+    <delete id="remove" parameterType="com.ht.api.entity.User">
+        DELETE FROM user
+        WHERE id = #{id} and username =#{username} and password = #{password} and email = #{email} and status =#{status}
+    </delete>
+
+    <select id="getByName" parameterType="java.lang.String" resultMap="modelResultMap">
+        SELECT *
+        FROM user
+        WHERE username = #{username}
+    </select>
+
+    <select id="getAll" resultMap="modelResultMap">
+        SELECT *
+        FROM user LIMIT 1000
+    </select>
+
+</mapper>

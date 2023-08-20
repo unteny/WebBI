@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ht.api.mapper.UserRoleMapper">
+    <resultMap id="modelResultMap" type="com.ht.api.entity.UserRole">
+        <id property="id" column="id" />
+        <result property="userid" column="user_id" />
+        <result property="roleid" column="role_id" />
+        <result property="status" column="status" />
+    </resultMap>
+
+    <insert id="add" parameterType="com.ht.api.entity.UserRole">
+        INSERT INTO user_role (user_id, role_id,status)
+        VALUES (#{userid},#{roleid}, #{status})
+    </insert>
+
+    <update id="update" parameterType="com.ht.api.entity.UserRole">
+        UPDATE user_role
+        SET  user_id = #{userid} ,role_id = #{userid} ,status=#{status}
+        WHERE id = #{id} and user_role =#{userrole} and memo = #{memo} and status =#{status}
+    </update>
+
+    <delete id="remove" parameterType="com.ht.api.entity.UserRole">
+        DELETE FROM user_role WHERE id = #{id} and user_id =#{userid} and role_id = #{roleid} and status =#{status}
+    </delete>
+
+    <select id="getByUserID" parameterType="java.lang.String" resultMap="modelResultMap">
+        SELECT *
+        FROM user_role
+        WHERE user_id = #{userid}
+    </select>
+</mapper>
