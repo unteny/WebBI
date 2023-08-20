@@ -28,7 +28,7 @@ import static com.ht.api.config.HisCrypto.DESDecrypt;
 @RestController
 @RequestMapping("/")
 public class ImageController {
-    private final ImageMapper im;
+    private final ImageMapper imageMapper;
     private final String imgPath;
     private final String imgURL;
     public ImageController(ImageMapper im) {
@@ -36,7 +36,7 @@ public class ImageController {
         imgURL = GlobalConfig.corePara.get("imgurl").getValue()==null ? "/www/image" : GlobalConfig.corePara.get("imgurl").getValue();
         System.out.println(imgPath);
         System.out.println(imgURL);
-        this.im = im;
+        this.imageMapper = im;
     }
 
     @PostMapping("/uploadOne")
@@ -67,7 +67,7 @@ public class ImageController {
             image.setCart("未分类");
             image.setName(fileName);
             image.setFilename(uniqueFileName);
-            this.im.add(image);
+            this.imageMapper.add(image);
 
             // Create the URL to access the uploaded file
             String fileURL = imgURL + "images/" + uniqueFileName;
@@ -101,13 +101,13 @@ public class ImageController {
 
     @PostMapping("/allimages")
     public List<Image> getallImage() {
-        return im.getAll();
+        return imageMapper.getAll();
     }
 
 
     @PostMapping("/allimagecarts")
     public List<String> getAllCarts() {
-        return im.getAllCarts();
+        return imageMapper.getAllCarts();
     }
 
 
@@ -116,7 +116,7 @@ public class ImageController {
         byte[] decodedBytes = Base64.getDecoder().decode(cart);
         String decodedString = new String(decodedBytes);
         String sql2 = DESDecrypt(decodedString);
-        return im.getByCart(sql2);
+        return imageMapper.getByCart(sql2);
     }
 
 
@@ -130,6 +130,6 @@ public class ImageController {
         img.setName(para[0]);
         img.setCart(para[1]);
         img.setFilename(para[2]);
-        return im.uppdate(img);
+        return imageMapper.uppdate(img);
     }
 }

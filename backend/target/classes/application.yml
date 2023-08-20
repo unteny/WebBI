@@ -11,8 +11,6 @@ spring:
       max-file-size: 15MB
       max-request-size: 15MB
 
-  #servlet.multipart.location: D:\image
-
   datasource:
     url: jdbc:mysql://101.43.139.84:3306/test4
     username: zcy
