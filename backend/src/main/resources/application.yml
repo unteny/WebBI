@@ -14,7 +14,7 @@ spring:
   #servlet.multipart.location: D:\image
 
   datasource:
-    url: jdbc:mysql://101.43.139.84:3306/test4
+    url: jdbc:mysql://127.0.0.1:3306/test4
     username: zcy
     password: zcy2013.
     driver-class-name: com.mysql.cj.jdbc.Driver
