@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ht.api.mapper.ViewMapper">
+    <resultMap id="ViewResultMap" type="com.ht.api.entity.View">
+        <id property="id" column="id" />
+        <result property="viewname" column="viewname" />
+        <result property="refid" column="refid" />
+        <result property="frefid" column="frefid" />
+        <result property="settings" column="settings" />
+        <result property="type" column="type" />
+        <result property="data" column="data" />
+        <result property="style" column="style" />
+        <result property="datatype" column="datatype" />
+        <result property="db" column="db" />
+        <result property="fulldata" column="fulldata" />
+
+    </resultMap>
+
+    <resultMap id="datatypeResultMap" type="java.lang.String">
+        <result property="datatype" column="datatype"/>
+    </resultMap>
+
+    <resultMap id="typeResultMap" type="java.lang.String">
+        <result property="type" column="type"/>
+    </resultMap>
+
+    <select id="getViewByVname" parameterType="java.lang.String"  resultMap="ViewResultMap">
+        SELECT id,viewname,frefid,refid,settings,type,data,style,datatype,db,'' fulldata FROM view_data
+        where viewname = #{viewname}
+    </select>
+
+    <select id="getalldatatype" resultMap="datatypeResultMap">
+        SELECT datatype FROM view_data group by datatype
+    </select>
+
+    <select id="getalltype" resultMap="typeResultMap">
+        SELECT type FROM view_data group by type
+    </select>
+
+    <select id="getViewByFrefid" parameterType="java.lang.String"  resultMap="ViewResultMap">
+        SELECT id,viewname,frefid,refid,settings,type,data,style,datatype,db,'' fulldata FROM view_data
+        where viewname = #{viewname} and frefid = #{frefid}
+    </select>
+
+    <insert id="addViews" parameterType="java.util.List">
+        <foreach collection="list" item="view" separator=";">
+            INSERT INTO view_data (viewname,frefid, refid, settings, type, data, style, datatype, db,fulldata) VALUES (#{view.viewname},#{view.frefid}, #{view.refid}, #{view.settings}, #{view.type}, #{view.data}, #{view.style}, #{view.datatype}, #{view.db},#{view.fulldata});
+        </foreach>
+    </insert>
+
+    <insert id="addView" parameterType="com.ht.api.entity.View">
+        INSERT INTO view_data (viewname,frefid, refid, settings, type, data, style, datatype, db,fulldata)
+        VALUES (#{viewname},#{frefid}, #{refid}, #{settings}, #{type}, #{data}, #{style}, #{datatype}, #{db},#{fulldata})
+    </insert>
+
+    <delete id="delByVname" parameterType="java.lang.String">
+        DELETE FROM view_data WHERE viewname = #{viewname}
+    </delete>
+
+    <delete id="delByFrefid" parameterType="java.lang.String">
+        DELETE FROM view_data WHERE viewname = #{viewname} and frefid = #{frefid}
+    </delete>
+
+</mapper>

@@ -1,0 +1,41 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ht.api.mapper.DictionaryMapper">
+
+    <insert id="add" parameterType="com.ht.api.entity.Dictionary">
+        INSERT INTO com_dictionary (name, code, value, type, memo, status)
+        VALUES (#{name}, #{code}, #{value}, #{type}, #{memo}, #{status})
+    </insert>
+
+    <update id="update" parameterType="com.ht.api.entity.Dictionary">
+        UPDATE com_dictionary
+        SET name = #{name}, code = #{code}, value = #{value}, type = #{type}, memo = #{memo}, status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="remove" parameterType="com.ht.api.entity.Dictionary">
+        DELETE FROM com_dictionary
+        WHERE name = #{name} and code = #{code} and value = #{value} and type = #{type} and memo = #{memo} and status = #{status}
+    </delete>
+
+    <select id="getPoolByName" parameterType="java.lang.String" resultType="com.ht.api.entity.Dictionary">
+        SELECT * FROM com_dictionary
+        WHERE name = #{name}
+    </select>
+
+    <select id="getPoolByID" parameterType="java.lang.Integer" resultType="com.ht.api.entity.Dictionary">
+        SELECT * FROM com_dictionary
+        WHERE id = #{id}
+    </select>
+
+    <select id="getAll" resultType="com.ht.api.entity.Dictionary">
+        SELECT * FROM com_dictionary
+    </select>
+
+    <select id="getCore" resultType="com.ht.api.entity.Dictionary">
+        SELECT * FROM com_dictionary where type ='core'
+    </select>
+
+</mapper>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ht.api.mapper.PermissionMapper">
+    <resultMap id="modelResultMap" type="com.ht.api.entity.Permission">
+        <id property="id" column="id" />
+        <result property="permission" column="permission" />
+        <result property="memo" column="memo" />
+        <result property="status" column="status" />
+    </resultMap>
+
+    <insert id="add" parameterType="com.ht.api.entity.Permission">
+        INSERT INTO permission (permission, memo,status)
+        VALUES (#{permission},#{memo}, #{status})
+    </insert>
+
+    <update id="update" parameterType="com.ht.api.entity.Permission">
+        UPDATE permission
+        SET  cart = #{cart} ,name = #{name}
+        WHERE id = #{id} and permission =#{permission} and memo = #{memo} and status =#{status}
+    </update>
+
+    <delete id="remove" parameterType="com.ht.api.entity.Permission">
+        DELETE FROM permission WHERE id = #{id} and permission =#{permission} and memo = #{memo} and status =#{status}
+    </delete>
+
+    <select id="getByName" parameterType="java.lang.String" resultMap="modelResultMap">
+        SELECT *
+        FROM permission
+        WHERE name = #{name} or filename = #{name}
+    </select>
+
+    <select id="getByCart" parameterType="java.lang.String" resultMap="modelResultMap">
+        SELECT *
+        FROM permission
+        WHERE cart = #{cart}
+    </select>
+
+    <select id="getAll" resultMap="modelResultMap">
+        SELECT *
+        FROM permission LIMIT 1000
+    </select>
+
+</mapper>

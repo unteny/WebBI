@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ht.api.mapper.RolePermissionMapper">
+    <resultMap id="modelResultMap" type="com.ht.api.entity.RolePermission">
+        <id property="id" column="id" />
+        <result property="permissionid" column="permission_id" />
+        <result property="roleid" column="role_id" />
+        <result property="status" column="status" />
+    </resultMap>
+
+    <insert id="add" parameterType="com.ht.api.entity.RolePermission">
+        INSERT INTO role_permission (user_id, role_id,status)
+        VALUES (#{permissionid},#{roleid}, #{status})
+    </insert>
+
+    <update id="update" parameterType="com.ht.api.entity.RolePermission">
+        UPDATE role_permission
+        SET  permission_id = #{permissionid} ,role_id = #{userid} ,status=#{status}
+        WHERE id = #{id} and permission_id =#{permissionid} and memo = #{memo} and status =#{status}
+    </update>
+
+    <delete id="remove" parameterType="com.ht.api.entity.RolePermission">
+        DELETE FROM role_permission WHERE id = #{id} and permission_id =#{permissionid} and role_id = #{roleid} and status =#{status}
+    </delete>
+
+    <select id="getByRoleID" parameterType="java.lang.Integer" resultMap="modelResultMap">
+        SELECT *
+        FROM role_permission
+        WHERE role_id = #{roleid}
+    </select>
+</mapper>

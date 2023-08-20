@@ -1,0 +1,32 @@
+<configuration>
+
+    <!-- Define the log file location and name -->
+    <property name="LOG_PATH" value="D:/uniapp/Projects/gppBackend" />
+    <property name="LOG_FILE" value="${LOG_PATH}/debug.log" />
+
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- Daily rollover -->
+            <fileNamePattern>${LOG_PATH}/debug.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- Each file should be limited to 100MB -->
+            <maxFileSize>100MB</maxFileSize>
+            <!-- Keep 7 days' worth of logs -->
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="Console" />
+        <appender-ref ref="RollingFile" />
+    </root>
+</configuration>
