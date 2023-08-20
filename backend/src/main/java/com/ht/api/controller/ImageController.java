@@ -29,12 +29,16 @@ import static com.ht.api.config.HisCrypto.DESDecrypt;
 @RequestMapping("/")
 public class ImageController {
     private final ImageMapper im;
+    private final String imgPath;
+    private final String imgURL;
     public ImageController(ImageMapper im) {
+        imgPath = GlobalConfig.corePara.get("imgpath").getValue()==null ? "/www/image" : GlobalConfig.corePara.get("imgpath").getValue();
+        imgURL = GlobalConfig.corePara.get("imgurl").getValue()==null ? "/www/image" : GlobalConfig.corePara.get("imgurl").getValue();
+        System.out.println(imgPath);
+        System.out.println(imgURL);
         this.im = im;
     }
 
-    private final String imgPath = GlobalConfig.corePara.get("imgpath").getValue()==null ? "/www/image" : GlobalConfig.corePara.get("imgpath").getValue();
-    private final String imgURL = GlobalConfig.corePara.get("imgurl").getValue()==null ? "/www/image" : GlobalConfig.corePara.get("imgurl").getValue();
     @PostMapping("/uploadOne")
     public ResponseEntity<String> uploadOneFile(@RequestParam("file") MultipartFile file) {
         if (file == null || file.isEmpty()) {

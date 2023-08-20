@@ -17,6 +17,7 @@ public class GlobalConfig {
     public GlobalConfig(DictionaryMapper dictionaryMapper) {
         this.dictionaryMapper = dictionaryMapper;
         corePara = addListToMap(dictionaryMapper.getCore());
+        System.out.println("ok");
     }
     public static HashMap<String, Dictionary> addListToMap(List<Dictionary> tList) {
         HashMap<String, Dictionary> newhash = new HashMap<>();
