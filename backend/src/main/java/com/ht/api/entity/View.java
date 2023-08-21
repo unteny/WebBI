@@ -12,6 +12,7 @@ public class View {
     private String type;
     private String data;
     private String style;
+    private String classname;
     private String datatype;
     private String db;
     private String fulldata;

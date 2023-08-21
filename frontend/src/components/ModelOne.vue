@@ -1,5 +1,5 @@
 <template>
-	<div><GltfModel :src="cdata"/></div>
+	<GltfModel :src="cdata"/>
 </template>
 
 <script>

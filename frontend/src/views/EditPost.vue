@@ -1,5 +1,5 @@
 <template>
-	<mavon-editor ref="md" @imgAdd="$imgAdd" v-model="value" navigation='true' @save="save"/>
+	<mavon-editor ref="md" :defaultOpen ="preview" @imgAdd="$imgAdd" v-model="value" navigation='true' @save="save"/>
 </template>
 
 <script>

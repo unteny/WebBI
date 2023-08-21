@@ -6,6 +6,7 @@ export const newview = {id:0,viewname:"修改组件名称",frefid:"fnew",refid:"
 const DESIV = CryptoJS.enc.Utf8.parse(import.meta.env.VITE_APP_DES_IV);
 const key = CryptoJS.enc.Utf8.parse(import.meta.env.VITE_APP_DES_KEY);
 export const baseurl = import.meta.env.VITE_APP_BASE_URL;
+export const indexurl = import.meta.env.VITE_APP_INDEX_URL;
 export function DESEncrypt(originalValue) {
   const encrypted = CryptoJS.DES.encrypt(originalValue, key, {
     iv: DESIV,
@@ -28,7 +29,6 @@ export function api(apiname, meth) {
   return axios({
     method: meth,
     url: url,
-    withCredentials: true, // 携带 cookie
   }).then((response) => {
     return response.data;
   }).catch((error) => {
@@ -42,8 +42,7 @@ export function apiwithpara(apiname, meth, p1) {
   const url = `${baseurl}${apiname}/?p1=${encodedP1}`;
   return axios({
     method: meth,
-    url: url,
-    withCredentials: true, // 携带 cookie
+    url: url
   }).then((response) => {
     return response.data;
   }).catch((error) => {
@@ -57,7 +56,11 @@ export function apihead(apiname, meth, p1) {
   return axios({
     method: meth,
     url: url,
-    withCredentials: true, // 携带 cookie
+	// headers: {
+	//     "Content-Type": "application/x-www-form-urlencoded",
+	// // 重点处：请求的 header 头里塞入自定义参数
+	//     "satoken": localStorage.getItem("satoken")
+	// }
   }).then((response) => {
     return response;
   }).catch((error) => {

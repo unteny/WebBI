@@ -2,13 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ht.api.mapper.UserMapper">
-    <resultMap id="modelResultMap" type="com.ht.api.entity.User">
-        <id property="id" column="id" />
-        <result property="username" column="username" />
-        <result property="password" column="password" />
-        <result property="email" column="email" />
-        <result property="status" column="status" />
-    </resultMap>
 
     <insert id="add" parameterType="com.ht.api.entity.User">
         INSERT INTO user (username, password,email,status)
@@ -26,13 +19,13 @@
         WHERE id = #{id} and username =#{username} and password = #{password} and email = #{email} and status =#{status}
     </delete>
 
-    <select id="getByName" parameterType="java.lang.String" resultMap="modelResultMap">
+    <select id="getByName" parameterType="java.lang.String" resultType="com.ht.api.entity.User">
         SELECT *
         FROM user
         WHERE username = #{username}
     </select>
 
-    <select id="getAll" resultMap="modelResultMap">
+    <select id="getAll" resultType="com.ht.api.entity.User">
         SELECT *
         FROM user LIMIT 1000
     </select>

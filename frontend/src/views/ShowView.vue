@@ -80,7 +80,7 @@ export default {
 			{key:"info",title:'描述',dataKey:'info',align: 'center',width:200},
 			{key:"cart",title:'类别',dataKey:'cart',align: 'center',width:200},
 			{key:"createTime",title:'创建时间',dataKey:'createTime',align: 'center',width:200},
-		]
+		],
     };
   },
   mounted() {
@@ -95,14 +95,30 @@ export default {
   },
   methods: {
 	showDetial(index,row){
-		const url = 'http://localhost:5173/screen?viewname=' + row.viewName;  
+		const url = myfunction.indexurl+'screen?viewname=' + row.viewName;  
 		window.open(url, '_blank');
 	},
 	editview(index,row){
-		const url = 'http://localhost:5173/editview?viewname=' + row.viewName;  
+		const url = myfunction.indexurl+'editview?viewname=' + row.viewName;  
 		window.open(url, '_blank');
 	},
 	addview(){
+		if(this.newview.trim()===""){
+			alert("新文章名不可为空");
+		}else
+		{
+			myfunction.apiwithpara('nonquery','POST',`insert into test4.view_info(viewname) value('${this.newview.trim()}') -张承宇本地`).
+			then(result => {
+			  console.log(result)
+			  if(result===1){
+				  const url = myfunction.indexurl+'editview?viewname=' + this.newview.trim();
+				  window.open(url, '_blank');
+			  }
+			}).
+			catch(error => {
+			    console.error(error); // 返回请求失败或未登录的错误信息
+			});
+		}
 	}
   }
 };

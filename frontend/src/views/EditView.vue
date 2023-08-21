@@ -1,10 +1,11 @@
 <template >
+<div class="container ">
+<div class="row">
 	<el-button-group class="ml-4" style="position: fixed;top: 5px;right: 5px;z-index: 9999;">
 		<el-button type="primary" icon="Expand" @click="navset" /> 
 		<el-button type="primary" icon="Upload" @click="update" />
 		<el-button type="primary" icon="Plus" 
-		 @dragend="dragEnd" draggable="true"
-		 @click="addview"/>
+		 @dragend="dragEnd" draggable="true"/>
 		<el-button type="primary" icon="Delete" @click="delview"/>
 	</el-button-group>
 <component id="ff" v-drag @click="setItem(item)"
@@ -14,8 +15,10 @@ v-for="item in comps"
 :ref="item.frefid"
 :style="item.style"
 style="border: 1px solid blue;"
+:class="item.classname"
 :cdata="item.data"
 :cdatatype="item.datatype"
+:cdb="item.db"
 :csettings="item.settings"
 :crefid="item.refid"
 :cfulldata="item.fulldata"
@@ -52,6 +55,8 @@ style="border: 1px solid blue;"
 	 />
 	数据库元素属性
 	<el-input v-model="currstyle" @change="setdata" placeholder="数据库元素属性" autosize type="textarea" />
+	数据库Class属性
+	<el-input v-model="currclassname" @change="setdata" placeholder="数据库Class属性" autosize type="textarea" />
 	父元素ref
 	<el-input v-model="currfrefid" @change="setdata" placeholder="父元素ref" autosize type="textarea" />
 	控件ref
@@ -94,26 +99,22 @@ style="border: 1px solid blue;"
 	</el-select>
   </el-tab-pane>
 </el-tabs>
-	<el-drawer z-index="9999" direction='ltr' v-model="drawer"  :with-header="false">
-		<Menu cdata ="SELECT * FROM test4.menu WHERE menu.menu_name = 'INDEX'" cdb="张承宇本地"></Menu>
-	</el-drawer>
-	
-	<el-card v-show="istoolshow" :style="cardStyle">
-	    <div v-for="item in allDafaultComps" :key="item.id" class="text item">{{ item.frefid +'类型:'+ item.type}}</div>
+	<el-card v-show="istoolshow" ref="tools" :style="cardStyle">
+	    <div  v-for="item in allDafaultComps" :key="item.id" @click="addview(item)" class="text item">{{ item.frefid +'类型:'+ item.type}}</div>
 	</el-card>
-	
+  </div>
+</div>
 </template>
 
 <script>
 import * as echarts from 'echarts';
 import * as myfunction from '/common/function.js';
-
+import { ElNotification } from 'element-plus';
 export default {
   components: {},
   data() {
     return {
 	navopen:true,
-	drawer:false,
 	istoolshow:false,
 	bgcolor:'rgba(255, 255, 255, 1)',
 	curcolor:'rgba(19, 206, 102, 0.8)',
@@ -129,6 +130,7 @@ export default {
 	currel:null,
 	elstyle:'',
 	currstyle:'',
+	currclassname:'',
 	currsettings:'',
 	currtype:'',
 	currdata:'',
@@ -142,8 +144,8 @@ export default {
 	  position: 'fixed',
 	  left: '0',
 	  top: '0',
-	  zIndex: '1000',
-	  pointerEvents: 'none' // Prevent the card from blocking mouse events
+	  zindex: '1000',
+	  //pointerEvents: 'none' // Prevent the card from blocking mouse events
 	}
     }
   },
@@ -181,18 +183,15 @@ export default {
 		const params = this.$route.query;
 		if(params !=null){
 			try{
-				this.comps=[]
-				this.models=[]
-				var all =[]
 				myfunction.apiwithpara('view','POST',params.viewname).
-				then( result =>{
-					all = result
-					all.forEach(item => {
-						var ob = all.pop()
-						if (item.itemType==='ModelComponent') {
-							this.models.push(ob);
+				then(result =>{
+					this.comps=[]
+					this.models=[]
+					result.forEach(item => {
+						if (item.itemType=='ModelComponent') {
+							this.models.push(item);
 						}else{
-							this.comps.push(ob)
+							this.comps.push(item)
 						}
 					});
 				}).
@@ -233,6 +232,7 @@ export default {
 		this.elstyle = el.style.cssText;
 		
 		this.currstyle = currjson.style;
+		this.currclassname = currjson.classname;
 		this.currsettings = currjson.settings;
 		this.currtype = currjson.type;
 		this.currdata = currjson.data;
@@ -258,6 +258,7 @@ export default {
 		console.log(this.currsettings)
 		let curIndex = this.comps.findIndex(item => item  == this.currcomp);
 		this.currcomp.style = this.currstyle;
+		this.currcomp.class = this.currclassname;
 		this.currcomp.settings = this.currsettings;
 		this.currcomp.type = this.currtype;
 		this.currcomp.data = this.currdata;
@@ -283,31 +284,55 @@ export default {
 		var jsonString = JSON.stringify(this.comps);
 		myfunction.apiwithpara('updateviews','POST',jsonString).
 		then(re=>{
-			ElementPlus.ElNotification({
-			  title: '!',
+			ElNotification({
+			  title: '上传成功',
 			  message: re,
 			  position: 'top-left',
 			})
+			this.getdata()
 		});
 	},
-	addview(){
-		let v =myfunction.newview
-		if(this.comps[0].viewname!=null){
-			v.viewname = this.comps[0].viewname;
+	addview(item){
+		let v =item
+		if(this.$route.query.viewname!=null){
+			v.viewname = this.$route.query.viewname;
+			v.frefid = v.frefid + this.comps.length;
+			v.refid = v.refid + this.comps.length;
+			v.style = "height: 25%; width: 25%;  position: absolute;" +'left:'+ event.clientX + 'px;top:'+event.clientY + 'px;'
+			this.comps.push(v)
 		}
-		this.comps.push(myfunction.newview)
+		console.log(this.comps)
+		this.istoolshow = false
+	},
+	delview(){
+		if(this.currcomp!=null){
+			myfunction.apiwithpara('delByFrefid','POST',JSON.stringify(this.currcomp)).
+			then(re=>{
+				ElNotification({
+				  title: '删除成功',
+				  message: re,
+				  position: 'top-left',
+				})
+				this.getdata()
+			});
+		}
 	}
   }
 }
 </script>
 <style scoped>
 .fixed-tabs {
-	z-index: 9999;
+  z-index: 9999;
   width: 15%;
   position: fixed;
   top: 5%;
   right: 0;
   height: 80%;
   background-color: rgba(0, 255, 255, 0.4);
+}
+.item {
+  margin-bottom: 10px; /* 设置下边距为 10px */
+  padding: 10px; /* 设置内边距为 10px */
+  border-bottom: 1px solid #ccc;
 }
 </style>

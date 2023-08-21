@@ -3,7 +3,9 @@ package com.ht.api.controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+import com.ht.api.config.HisCrypto;
 import com.ht.api.entity.User;
 import com.ht.api.entity.View;
 import com.ht.api.entity.ViewInfo;
@@ -40,8 +42,8 @@ public class ViewController {
         String sql2  = Base64to(sql,null);
         List<View> Vs = vm.getViewByVname(sql2);
         JsonArray jsonArray = new JsonArray();
+        Gson gson = new Gson();
         for (View v:Vs) {
-            JsonObject jsonObject = new JsonObject();
             String datatype = v.getDatatype();
             v.setSettings(DESDecrypt(v.getSettings()));
             v.setData(DESDecrypt(v.getData()));
@@ -55,27 +57,10 @@ public class ViewController {
             }else {
                 v.setFulldata(v.getData());
             }
-
-            jsonObject.addProperty("id", v.getId());
-            jsonObject.addProperty("viewname", v.getViewname().replaceAll("\"", "'"));
-            jsonObject.addProperty("frefid", v.getFrefid().replaceAll("\"", "'"));
-            jsonObject.addProperty("refid", v.getRefid().replaceAll("\"", "'"));
-            jsonObject.addProperty("settings",v.getSettings().replaceAll("\"", "'") );
-            jsonObject.addProperty("type", v.getType().replaceAll("\"", "'"));
-            jsonObject.addProperty("data", v.getData().replaceAll("\"", "'"));
-            jsonObject.addProperty("style", v.getStyle().replaceAll("\"", "'"));
-            jsonObject.addProperty("datatype", v.getDatatype().replaceAll("\"", "'"));
-            jsonObject.addProperty("db",v.getDb().replaceAll("\"", "'"));
-            jsonObject.addProperty("fulldata", v.getFulldata().replaceAll("\"", "'"));
-            jsonArray.add(jsonObject);
+            jsonArray.add(gson.toJsonTree(v));
         }
-        Gson gson = new Gson();
-        String json = gson.toJson(jsonArray);
-
-        String decodedStr = StringEscapeUtils.unescapeJava(json).replaceAll("\r?\n", " ");
-        return decodedStr;
+        return gson.toJson(jsonArray);
     }
-
 
     @PostMapping("updateviews/")
     @Transactional
@@ -90,7 +75,8 @@ public class ViewController {
         }
 
         try {
-            if(vm.delByVname(views.get(0).getViewname())>-1){
+            int xx =vm.delByVname(views.get(0).getViewname());
+            if(xx>-1){
                 for (View view : views) {
                     view.setId(null);
                     view.setFulldata("");
@@ -108,6 +94,12 @@ public class ViewController {
         return 0;
     }
 
+    @PostMapping("delByFrefid/")
+    public int delByFrefid(@RequestParam("p1") String sql) throws Exception {
+        String sql2 = Base64to(sql,null);
+        View re = stringToClass(sql2,View.class);
+        return vm.delByFrefid(re.getViewname(), re.getFrefid());
+    }
 
 
     @PostMapping("getalldatatype/")

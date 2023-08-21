@@ -1,18 +1,22 @@
 <template >
-<div style="position: fixed;z-index: 0;height: 100%;width: 100%;background-color: rgba(255, 255, 255, 0.0);">
-<component id="ff" v-drag @click="setItem(item)"
+<div class="container ">
+<div class="row">
+<component id="ff"
 v-for="item in comps"
 :key="item.id"
 :is="item.type"
-
 :ref="item.frefid"
 :style="item.style"
+style="border: 1px solid blue;"
+:class="item.classname"
 :cdata="item.data"
 :cdatatype="item.datatype"
+:cdb="item.db"
 :csettings="item.settings"
 :crefid="item.refid"
 :cfulldata="item.fulldata"
 ></component>
+
 <div style="position: fixed;z-index: -1;height: 100%;width: 100%; background-color: rgba(255, 255, 255, 0.0);">
 <Renderer style="height: 100%;width: 100%;" ref="renderer" :alpha="true" antialias
 :orbit-ctrl="{ enableDamping: true }" resize
@@ -35,7 +39,7 @@ v-for="item in comps"
   </Scene>
 </Renderer>
 </div>
-
+</div>
 </div>
 </template>
 
@@ -61,23 +65,17 @@ export default {
 		const params = this.$route.query;
 		if(params !=null){
 			try{
-				var comps=[]
-				var models=[]
-				var all =[]
 				myfunction.apiwithpara('view','POST',params.viewname).
-				then( result =>{
-					all = result
-					all.forEach(item => {
-						var ob = all.pop()
-						if (item.itemType==='ModelComponent') {
-							models.push(ob);
+				then(result =>{
+					this.comps=[]
+					this.models=[]
+					result.forEach(item => {
+						if (item.itemType=='ModelComponent') {
+							this.models.push(item);
 						}else{
-							comps.push(ob)
+							this.comps.push(item)
 						}
 					});
-					this.comps  = comps
-					this.models = models
-					console.log(models )
 				}).
 				catch(error=>{
 					console.log(error);

@@ -95,25 +95,23 @@ export default {
   },
   methods: {
 	showDetial(index,row){
-		console.log(row.post_name)
-		const url = 'http://localhost:5173/editpost?postname=' + row.post_name;  
+		const url = myfunction.indexurl+'editpost?postname=' + row.post_name;  
 		window.open(url, '_blank');
 	},
 	editview(index,row){
-		console.log(row.post_name)
-		const url = 'http://localhost:5173/editpost?postname=' + row.post_name;  
+		const url = myfunction.indexurl+'editpost?postname=' + row.post_name;  
 		window.open(url, '_blank');
 	},
 	addview(){
-		if(this.newpost===""){
+		if(this.newpost.trim()===""){
 			alert("新文章名不可为空");
 		}else
 		{
-			myfunction.apiwithpara('nonquery','POST',`insert into test4.post(post_name) value('${this.newpost}') -张承宇本地`).
+			myfunction.apiwithpara('nonquery','POST',`insert into test4.post(post_name) value('${this.newpost.trim()}') -张承宇本地`).
 			then(result => {
 			  console.log(result)
 			  if(result===1){
-				  const url = 'http://localhost:5173/editpost?postname=' + this.newpost;
+				  const url = myfunction.indexurl+'editpost?postname=' + this.newpost.trim();
 				  window.open(url, '_blank');
 			  }
 			}).

@@ -1,4 +1,8 @@
 import { createApp } from 'vue'
+import 'jquery';
+import 'popper.js'
+//import 'bootstrap';
+
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import ElementPlus from 'element-plus';
@@ -20,6 +24,9 @@ import MenuComponent from '/src/components/Menu.vue'
 import SlideVerify from '/src/components/SlideVerify.vue'
 import SlideVerify2 from '/src/components/SlideVerify2.vue'
 import Login from '/src/components/Login.vue'
+import Post from '/src/components/Post.vue'
+import View from '/src/components/View.vue'
+import MultiView from '/src/components/MultiView.vue'
 
 
 // the base module 
@@ -56,6 +63,9 @@ registerLanguageDictionary(zhCN);
 registerAllModules();
 
 const app = createApp(App)
+app.config.globalProperties.$ = window.$;
+app.config.globalProperties.jQuery = window.jQuery;
+app.config.globalProperties.Popper = window.Popper;
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
@@ -63,7 +73,6 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 Object.keys(HandsontableVue).forEach(componentName => {
   app.component(componentName, HandsontableVue[componentName]);
 });
-
 app.component('ImageComponent', ImageComponent);
 app.component('ModelComponent', ModelComponent);
 app.component('StringComponent', StringComponent);
@@ -73,6 +82,9 @@ app.component('MenuComponent', MenuComponent);
 app.component('SlideVerify', SlideVerify);
 app.component('SlideVerify2', SlideVerify2);
 app.component('Login', Login);
+app.component('Post', Post);
+app.component('View', View);
+app.component('MultiView', MultiView);
 
 app.directive('drag',{
         mounted(el){

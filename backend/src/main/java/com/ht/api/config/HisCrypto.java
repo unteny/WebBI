@@ -46,7 +46,7 @@ public class HisCrypto {
         return objectMapper.readValue(classString, clazz);
     }
 
-    public static String objectToJson(Object obj) throws Exception {
+    public static<T> String objectToJson(T obj) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(obj);
     }

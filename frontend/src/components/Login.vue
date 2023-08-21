@@ -47,7 +47,8 @@ export default {
         if (valid) {
 		  myfunction.apihead('doLogin','POST',JSON.stringify(this.loginForm)).
 		  then(re =>{
-			  console.log(re.headers)
+			  localStorage.setItem('satoken', myfunction.DESDecrypt( re.data));
+			  console.log(localStorage.getItem("satoken"))
 		  }).
 		  catch(err =>{
 			  console.error(err);
